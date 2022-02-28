@@ -1,7 +1,7 @@
 export interface UpdateBookDto {
   id: number;
   authors: string;
-  dateUTC: number;
+  dateUTC: string;
   departureDate: string;
   description: string;
   pages: number;

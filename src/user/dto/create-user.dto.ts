@@ -6,10 +6,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   fullName: string;
   @IsEmail(undefined, { message: 'Неверная почта' })
+  @IsNotEmpty()
   @UniqueOnDatabase(UserEntity, {
     message: 'Пользователь с таким email уже зарегистрирован',
   })
   email: string;
   @Length(6, 32, { message: 'Неверная длина пароля' })
+  @IsNotEmpty()
   password: string;
 }

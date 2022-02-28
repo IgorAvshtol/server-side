@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
-import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -14,11 +13,14 @@ export class UserService {
   ) {}
 
   async create(dto: CreateUserDto) {
-    const existingEmail = await this.repository.findOne({ email: dto.email });
-    if (!existingEmail) {
-      return await this.repository.save(dto);
-    }
-    return 'Пользователь с данным email уже зарегистрирован';
+    return await this.repository.save(dto);
+
+    // const existingEmail = await this.repository.findOne({ email: dto.email });
+    // console.log(existingEmail);
+    // if (!existingEmail) {
+    //   return await this.repository.save(dto);
+    // }
+    // return 'Пользователь с данным email уже зарегистрирован';
   }
 
   findAll() {
@@ -28,10 +30,6 @@ export class UserService {
   async findById(id: number) {
     return this.repository.findOne(id);
   }
-
-  // async findByCond(cond: LoginUserDto) {
-  //   return this.repository.findOne(cond);
-  // }
 
   async findByCond(email: string) {
     return await this.repository.findOne({ where: { email } });

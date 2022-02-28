@@ -17,12 +17,6 @@ import { Response } from 'express';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @UseGuards(LocalAuthGuard)
-  // @Post('login')
-  // async login(@Request() req) {
-  //   return this.authService.login(req.user);
-  // }
-
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Req() req, @Res({ passthrough: true }) res: Response) {
@@ -44,9 +38,24 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() dto: CreateUserDto) {
+  async register(
+    @Body() dto: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const userData = await this.authService.register(dto);
+    const token = userData.token;
+    const secretData = {
+      token,
+      refreshToken: '',
+    };
+    res.cookie('auth-cookie', secretData, { httpOnly: true });
     return this.authService.register(dto);
   }
+
+  // @Post('register')
+  // async register(@Body() dto: CreateUserDto) {
+  //   return this.authService.register(dto);
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')

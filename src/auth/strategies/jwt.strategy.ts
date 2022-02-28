@@ -8,7 +8,6 @@ import { Request as RequestType } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly userService: UserService) {
     super({
-      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: RequestType) => {
           const data = request?.cookies['auth-cookie'];
@@ -24,11 +23,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: { sub: number; email: string }) {
-    const data = { id: payload.sub, email: payload.email };
-    const user = await this.userService.findById(data.id);
+    const user = await this.userService.findById(payload.sub);
     if (!user) {
       throw new UnauthorizedException('Нет доступа к этой странице');
     }
+    const data = {
+      id: user.id,
+      email: payload.email,
+      firstName: user.fullName,
+    };
     return data;
   }
 }

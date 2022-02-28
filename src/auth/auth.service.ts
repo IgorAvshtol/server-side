@@ -21,20 +21,6 @@ export class AuthService {
     return null;
   }
 
-  // async validateUser(email: string, password: string): Promise<any> {
-  //   const user = await this.usersService.findByCond({
-  //     email,
-  //     password,
-  //   });
-  //   console.log(user);
-  //   const b = await bcrypt.compare(password, user.password);
-  //   console.log(b);
-  //   if (user && user.password === password) {
-  //     const { password, ...result } = user;
-  //     return result;
-  //   }
-  //   return null;
-  // }
   generateJwtToken(data: { id: number; email: string }) {
     const payload = { email: data.email, id: data.id };
     return this.jwtService.sign(payload);
@@ -49,11 +35,10 @@ export class AuthService {
   }
 
   async register(dto: CreateUserDto) {
-    const hashPassword = await bcrypt.hash(dto.password, 5);
-    const dataUser = { ...dto, password: hashPassword };
+    // const hashPassword = await bcrypt.hash(dto.password, 5);
+    // const dataUser = { ...dto, password: hashPassword };
     try {
-      // @ts-ignore
-      const { password, ...user } = await this.usersService.create(dataUser);
+      const { password, ...user } = await this.usersService.create(dto);
       return {
         ...user,
         token: this.generateJwtToken(user),
