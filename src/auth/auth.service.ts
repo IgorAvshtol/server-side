@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   generateJwtToken(data: { id: number; email: string }) {
-    const payload = { email: data.email, id: data.id };
+    const payload = { id: data.id, email: data.email };
     return this.jwtService.sign(payload);
   }
 
@@ -35,10 +35,10 @@ export class AuthService {
   }
 
   async register(dto: CreateUserDto) {
-    // const hashPassword = await bcrypt.hash(dto.password, 5);
-    // const dataUser = { ...dto, password: hashPassword };
+    const hashPassword = await bcrypt.hash(dto.password, 5);
+    const dataUser = { ...dto, password: hashPassword };
     try {
-      const { password, ...user } = await this.usersService.create(dto);
+      const { password, ...user } = await this.usersService.create(dataUser);
       return {
         ...user,
         token: this.generateJwtToken(user),

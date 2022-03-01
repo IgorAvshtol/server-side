@@ -13,6 +13,7 @@ import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { SetLikeBookDto } from './dto/setLike-book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -55,6 +56,16 @@ export class BooksController {
   @Patch('edit/:id')
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     return this.booksService.update(+id, updateBookDto);
+  }
+
+  @Patch('like')
+  async setLike(@Body() SetLikeBookDto: SetLikeBookDto) {
+    return this.booksService.like(SetLikeBookDto);
+  }
+
+  @Patch('dislike')
+  async setDislike(@Body() SetLikeBookDto: SetLikeBookDto) {
+    return this.booksService.dislike(SetLikeBookDto);
   }
 
   @Delete(':id')

@@ -21,13 +21,14 @@ export class AuthController {
   @Post('login')
   async login(@Req() req, @Res({ passthrough: true }) res: Response) {
     const userData = await this.authService.login(req.user);
-    const token = userData.token;
+    const { token, ...responseUserData } = userData;
+    // const token = userData.token;
     const secretData = {
       token,
       refreshToken: '',
     };
-    res.cookie('auth-cookie', secretData, { httpOnly: true });
-    return await this.authService.login(req.user);
+    await res.cookie('auth-cookie', secretData, { httpOnly: true });
+    return responseUserData;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -43,13 +44,14 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const userData = await this.authService.register(dto);
-    const token = userData.token;
+    const { token, ...responseUserData } = userData;
+    // const token = userData.token;
     const secretData = {
       token,
       refreshToken: '',
     };
     res.cookie('auth-cookie', secretData, { httpOnly: true });
-    return this.authService.register(dto);
+    return responseUserData;
   }
 
   // @Post('register')

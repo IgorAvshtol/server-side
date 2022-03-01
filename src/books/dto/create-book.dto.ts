@@ -3,7 +3,7 @@ export class CreateBookDto {
   departureDate: string;
   description: string;
   pages: number;
-  sections: string;
+  section: string;
   senderEmail: string;
   image: string;
   senderId: number;

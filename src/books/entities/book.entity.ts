@@ -33,7 +33,7 @@ export class BookEntity {
 
   @Column()
   @IsNotEmpty()
-  sections: string;
+  section: string;
 
   @Column()
   @IsNotEmpty()

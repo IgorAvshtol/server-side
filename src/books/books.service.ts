@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BookEntity } from './entities/book.entity';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { FileService } from '../file/file.service';
+import { SetLikeBookDto } from './dto/setLike-book.dto';
 
 @Injectable()
 export class BooksService {
@@ -27,14 +28,38 @@ export class BooksService {
     return this.repository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  async findOne(id: number) {
+    const find = await this.repository.findOne(id);
+    if (find) {
+      return find;
+    }
+    throw new NotFoundException('Книга не найдена');
   }
 
   async update(id: number, dto: UpdateBookDto) {
     const find = await this.repository.findOne(id);
     if (find) {
       return await this.repository.update(id, dto);
+    }
+    throw new NotFoundException('Книга не найдена');
+  }
+
+  async like(dto: SetLikeBookDto) {
+    const find = await this.repository.findOne(dto.id);
+    if (find) {
+      return await this.repository.update(dto.id, {
+        likes: Array.from(new Set([...find.likes, dto.userId])),
+      });
+    }
+    throw new NotFoundException('Книга не найдена');
+  }
+
+  async dislike(dto: SetLikeBookDto) {
+    const find = await this.repository.findOne(dto.id);
+    if (find) {
+      return await this.repository.update(dto.id, {
+        likes: find.likes.filter((id) => id !== dto.userId),
+      });
     }
     throw new NotFoundException('Книга не найдена');
   }
