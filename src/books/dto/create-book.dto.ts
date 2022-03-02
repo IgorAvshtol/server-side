@@ -5,7 +5,8 @@ export class CreateBookDto {
   pages: number;
   section: string;
   senderEmail: string;
-  image: string;
+  imageURL: string;
+  dateUTC: string;
   senderId: number;
   title: string;
   likes: number[];

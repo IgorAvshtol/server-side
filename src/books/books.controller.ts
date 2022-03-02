@@ -20,9 +20,16 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post()
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'imageURL', maxCount: 1 }]))
   async create(@UploadedFiles() files, @Body() dto: CreateBookDto) {
-    return this.booksService.create(dto, files.image[0]);
+    return this.booksService.create(dto, files.imageURL[0]);
+  }
+
+  @Post('test')
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
+  async test(@UploadedFiles() files) {
+    console.log(files);
+    return files;
   }
   // @Post()
   // @UseInterceptors(

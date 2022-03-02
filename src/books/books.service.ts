@@ -17,7 +17,7 @@ export class BooksService {
 
   async create(dto: CreateBookDto, image): Promise<BookEntity> {
     const imageBook = this.fileService.createFile(image);
-    return this.repository.save({ ...dto, image: imageBook });
+    return this.repository.save({ ...dto, imageURL: imageBook });
   }
 
   // async create(dto: CreateBookDto) {
