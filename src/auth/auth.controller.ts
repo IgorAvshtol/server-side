@@ -28,6 +28,7 @@ export class AuthController {
       refreshToken: '',
     };
     await res.cookie('auth-cookie', secretData, { httpOnly: true });
+    await res.cookie('userId', responseUserData.id, { httpOnly: true });
     return responseUserData;
   }
 
@@ -35,6 +36,7 @@ export class AuthController {
   @Get('logout')
   async loginOut(@Res() res: Response) {
     await res.cookie('auth-cookie', 'logout', { httpOnly: true });
+    await res.cookie('userId', 'none', { httpOnly: true });
     return res.json({ message: 'logout' });
   }
 
@@ -51,6 +53,7 @@ export class AuthController {
       refreshToken: '',
     };
     res.cookie('auth-cookie', secretData, { httpOnly: true });
+    res.cookie('userId', responseUserData.id, { httpOnly: true });
     return responseUserData;
   }
 

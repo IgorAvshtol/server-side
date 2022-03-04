@@ -25,12 +25,6 @@ export class BooksController {
     return this.booksService.create(dto, files.imageURL[0]);
   }
 
-  @Post('test')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
-  async test(@UploadedFiles() files) {
-    console.log(files);
-    return files;
-  }
   // @Post()
   // @UseInterceptors(
   //   FileInterceptor('image', {

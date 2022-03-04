@@ -29,6 +29,6 @@ export class CommentsEntity {
   @CreateDateColumn({ type: 'timestamp' })
   date: string;
 
-  @Column({ nullable: true })
+  @Column()
   text: string;
 }

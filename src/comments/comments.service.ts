@@ -11,16 +11,33 @@ export class CommentsService {
     @InjectRepository(CommentsEntity)
     private repository: Repository<CommentsEntity>,
   ) {}
-  async create(dto: CreateCommentDto) {
+  async create(dto: CreateCommentDto, userId: number) {
     return this.repository.save({
       text: dto.text,
       book: { id: dto.bookId },
-      author: { id: 20 },
+      author: { id: userId },
     });
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async findAll(bookId: number) {
+    const qb = this.repository.createQueryBuilder('c');
+    if (bookId) {
+      qb.where('c.bookId = :bookId', { bookId });
+    }
+
+    const result = await qb
+      .leftJoinAndSelect('c.book', 'book')
+      .leftJoinAndSelect('c.author', 'author')
+      .getMany();
+    return result.map((obj) => {
+      return {
+        id: obj.id,
+        date: obj.date,
+        text: obj.text,
+        author: obj.author.email,
+        book: obj.book.id,
+      };
+    });
   }
 
   findOne(id: number) {
