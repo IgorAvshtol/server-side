@@ -25,7 +25,7 @@ import * as path from 'path';
       password: '6880281',
       database: 'books-store',
       entities: [UserEntity, BookEntity, CommentsEntity],
-      synchronize: true,
+      synchronize: false,
     }),
     UserModule,
     BooksModule,
